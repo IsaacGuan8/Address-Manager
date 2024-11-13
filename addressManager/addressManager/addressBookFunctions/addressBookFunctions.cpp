@@ -7,13 +7,15 @@
 using std::cout, std::endl, std::cin, std::string, std::getline;
 
 namespace addressBookManagement{
+    //function to add in a contact
     void addContact(Address& addressBook, const Contact& newContact){
         addressBook.contacts.push_back(newContact);
     }
 
+    //function that displays all contacts in the addressbook, if empty it will notify the user
     void displayContacts(const Address& addressBook){
         if (addressBook.contacts.empty()){
-            cout << "Adress book is currently empty!" << endl;
+            cout << "Address book is currently empty!" << endl;
         } else{
             for(const auto& contact: addressBook.contacts){
                 cout << contact;
@@ -21,7 +23,21 @@ namespace addressBookManagement{
             }
         }
     }
-
+    
+    //function to search for a contact by name and print details
+    void searchContact(const Address& addressBook, const string& name){
+        for (const Contact& contact : addressBook.contacts){
+            if(contact.fullName == name){
+                cout << "Contact Found:" << endl;
+                cout << "--------------------" << endl;
+                cout << contact << endl;
+                return;
+            }
+        }
+        cout << "Contact with name " << name << " is not in the address book" << endl;
+    }
+    
+    //function manages the user interface to select what they want to do in the address book program
     void manageAddressBook(Address& addressBook){
         int choice = 0;
         do{
@@ -58,6 +74,15 @@ namespace addressBookManagement{
                     displayContacts(addressBook);
                     break;
                     
+                case SearchContactMenu:{
+                    string name;
+                    cout << "Enter to to search for in address book:" << endl;
+                    cin.ignore();
+                    getline(cin, name);
+                    searchContact(addressBook, name);
+                    break;
+                }
+                    
                 case DeleteContactMenu:{
                     break;
                 }
@@ -67,6 +92,7 @@ namespace addressBookManagement{
                 }
                     
                 case ExitMenu:
+                    cout << "Thank you for using the Address Book Managament program" << endl;
                     break;
                     
                 default:

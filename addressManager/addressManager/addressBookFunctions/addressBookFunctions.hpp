@@ -7,10 +7,11 @@
 using std::string;
 
 namespace addressBookManagement{
-    void manageAddressBook(Address& addressBook);
-    void addContact();
-    void displayContacts();
+    void addContact(const Address& addressBook);
+    void displayContacts(const Address& addressBook);
+    void searchContact(const Address& addressBook, const string& name);
     void deleteContact();
+    void manageAddressBook(Address& addressBook);
 }
 
 #endif
