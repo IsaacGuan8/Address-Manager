@@ -1,14 +1,12 @@
-//
-//  main.cpp
-//  addressManager
-//
-//  Created by Isaac Guan on 11/11/24.
-//
-
 #include <iostream>
+#include "addressBookFunctions/addressBookFunctions.hpp"
+#include "address/address.h"
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+using namespace std;
+
+int main() {
+    Address address;
+    addressBookManagement::manageAddressBook(address);
+    
     return 0;
 }

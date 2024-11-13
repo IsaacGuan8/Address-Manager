@@ -1,13 +1,13 @@
-//
-//  contactOperators.hpp
-//  addressManager
-//
-//  Created by Isaac Guan on 11/12/24.
-//
-
 #ifndef contactOperators_hpp
 #define contactOperators_hpp
 
-#include <stdio.h>
+#include "contact.h"
+#include <ostream>
 
-#endif /* contactOperators_hpp */
+using std::ostream;
+
+namespace addressBookManagement{
+    ostream& operator << (ostream& stream, const Contact& contact);
+}
+
+#endif

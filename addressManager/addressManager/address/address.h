@@ -1,12 +1,13 @@
-//
-//  address.h
-//  addressManager
-//
-//  Created by Isaac Guan on 11/12/24.
-//
-
 #ifndef address_h
 #define address_h
 
+#include <vector>
+#include "contact.h"
 
-#endif /* address_h */
+using std::vector;
+
+struct Address{
+    vector<Contact> contacts;
+};
+
+#endif

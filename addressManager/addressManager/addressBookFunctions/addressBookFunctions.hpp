@@ -1,13 +1,16 @@
-//
-//  addressBookFunctions.hpp
-//  addressManager
-//
-//  Created by Isaac Guan on 11/12/24.
-//
-
 #ifndef addressBookFunctions_hpp
 #define addressBookFunctions_hpp
 
-#include <stdio.h>
+#include <string>
+#include "address.h"
 
-#endif /* addressBookFunctions_hpp */
+using std::string;
+
+namespace addressBookManagement{
+    void manageAddressBook(Address& addressBook);
+    void addContact();
+    void displayContacts();
+    void deleteContact();
+}
+
+#endif
