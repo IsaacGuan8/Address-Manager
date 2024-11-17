@@ -1,10 +1,11 @@
-#include <iostream>
 #include "address.h"
 #include "menu.h"
 #include "contact.h"
 #include "contactOperators.hpp"
+#include <iostream>
+#include <fstream>
 
-using std::cout, std::endl, std::cin, std::string, std::getline;
+using std::cout, std::endl, std::cin, std::string, std::getline, std::ifstream, std::ofstream, std::shared_ptr;
 
 namespace addressBookManagement{
     //function to add in a contact
@@ -26,7 +27,7 @@ namespace addressBookManagement{
     
     //function to search for a contact by name and print details
     void searchContact(const Address& addressBook, const string& name){
-        for (const Contact& contact : addressBook.contacts){
+        for (const auto& contact : addressBook.contacts){
             if(contact.fullName == name){
                 cout << "Contact Found:" << endl;
                 cout << "--------------------" << endl;
@@ -37,6 +38,50 @@ namespace addressBookManagement{
         cout << "Contact with name " << name << " is not in the address book" << endl;
     }
     
+    // Function to delete contact by the name from address book
+    void deleteContact(const Address& addressBook, const string& name){
+        for (auto it = addressBook.contacts.begin(); it != addressBook.contacts.end(); ++it){
+            if (it->fullName == name){
+                addressBook.contacts.erase(it);
+                cout << "Contact " << name << " has been deleted" << endl;
+                return;
+            }
+        }
+        cout << "Contact with name " << name << " not found in address book, deletion unsuccessful" << endl;
+    }
+
+    // Function to edit an existing contact
+    void editContact(const Address& addressBook, const string& name){
+        for(auto& contact: addressBook.contacts){
+            if(contact.fullName == name){
+                
+            }
+        }
+    }
+
+    // Function to save address book to file
+    void saveToFile(const vector<shared_ptr<Contact>>& addressBook, const string& filename){
+        ofstream file(filename);
+        for (const auto& contact : addressBook) {
+            file << contact->fullName << "," << contact->phoneNumber << "," << contact->email << "," << contact->streetAddress << endl;
+        }
+    }
+
+    // Function to load address book from file
+    void loadFromFile(vector<shared_ptr<Contact>>& addressBook, const string& filename) {
+        ifstream file(filename);
+        string line, name, phone, email, address;
+        while (getline(file, line)) {
+            size_t pos = line.find(',');
+            name = line.substr(0, pos); line.erase(0, pos + 1);
+            pos = line.find(','); phone = line.substr(0, pos); line.erase(0, pos + 1);
+            pos = line.find(','); email = line.substr(0, pos); line.erase(0, pos + 1);
+            address = line;
+            addContact(addressBook, {name, phone, email, address});
+        }
+    }
+    
+    
     //function manages the user interface to select what they want to do in the address book program
     void manageAddressBook(Address& addressBook){
         int choice = 0;
@@ -46,7 +91,7 @@ namespace addressBookManagement{
             cout << SearchContactMenu << ". Search Contact" << endl;
             cout << DeleteContactMenu << ". Delete Contact" << endl;
             cout << EditContactMenu << ". Edit Contact" << endl;
-            cout << ExitMenu << ". Exit" << endl;
+            cout << Exit << ". Exit" << endl;
             
             cin >> choice;
             
@@ -91,7 +136,7 @@ namespace addressBookManagement{
                     break;
                 }
                     
-                case ExitMenu:
+                case Exit:
                     cout << "Thank you for using the Address Book Managament program" << endl;
                     break;
                     
@@ -99,7 +144,7 @@ namespace addressBookManagement{
                     cout << "Invalid choice." << endl;
             }
             
-        }while(choice != ExitMenu);
+        }while(choice != Exit);
     }
 
 }
