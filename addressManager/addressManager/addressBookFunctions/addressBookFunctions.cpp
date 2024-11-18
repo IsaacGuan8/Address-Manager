@@ -1,6 +1,7 @@
 #include "address.h"
 #include "menu.h"
 #include "contact.h"
+#include "editContactMenu.h"
 #include "contactOperators.hpp"
 #include <iostream>
 #include <fstream>
@@ -60,51 +61,83 @@ namespace addressBookManagement{
     void editContact(Contact* contactToEdit){
         // If contact not found
         if (contactToEdit == nullptr){
-                std::cout << "Invalid contact. Cannot edit." << std::endl;
+                cout << "Invalid contact. Cannot edit." << endl;
                 return;
             }
         
-        int choice = 0;
+        int editChoice = 0;
         do {
-            cout << "\nEditing Contact: " << contactToEdit->fullName << std::endl;
-            cout << "1. Edit Full Name" << std::endl;
-            cout << "2. Edit Phone Number" << std::endl;
-            cout << "3. Edit Email" << std::endl;
-            cout << "4. Edit Street Address" << std::endl;
-            cout << "5. Exit Edit Menu" << std::endl;
+            // Display menu for edit choices
+            cout << "Editing Contact: " << contactToEdit->fullName << endl;
+            cout << EditFullName << ". Edit Full Name" << endl;
+            cout << EditPhoneNumber << ". Edit Phone Number" << endl;
+            cout << EditEmail << ". Edit Email" << endl;
+            cout << EditStreetNumber << ". Edit Street Number" << endl;
+            cout << EditStreetName << ". Edit Street Name" << endl;
+            cout << EditCity << ". Edit City" << endl;
+            cout << EditState << ". Edit State" << endl;
+            cout << EditAreaCode << ". Edit Area Code" << endl;
+            cout << ExitAndSave << ". Save and Exit Edit Menu" << endl;
+            
             cout << "Enter your choice: ";
-            cin >> choice;
+            cin >> editChoice;
             cin.ignore(); // Clear input buffer
 
-            switch (choice) {
-                case 1:
+            switch (editChoice) {
+                case EditFullName:
                     cout << "Enter new full name: ";
-                    getline(std::cin, contactToEdit->fullName);
+                    getline(cin, contactToEdit->fullName);
                     break;
-                case 2:
+                    
+                case EditPhoneNumber:
                     cout << "Enter new phone number: ";
-                    getline(std::cin, contactToEdit->phoneNumber);
+                    getline(cin, contactToEdit->phoneNumber);
                     break;
-                case 3:
+                    
+                case EditEmail:
                     cout << "Enter new email: ";
-                    getline(std::cin, contactToEdit->email);
+                    getline(cin, contactToEdit->email);
                     break;
-                case 4:
-                    cout << "Enter new street address: ";
-                    getline(std::cin, contactToEdit->streetAddress);
+                    
+                case EditStreetNumber:
+                    cout << "Enter new street number: ";
+                    cin >> contactToEdit->address.streetNumber;
                     break;
-                case 5:
-                    cout << "Exiting edit menu." << std::endl;
+                    
+                case EditStreetName:
+                    cout << "Enter new street name: ";
+                    cin >> contactToEdit->address.streetName;
                     break;
+                    
+                case EditCity:
+                    cout << "Enter new city: ";
+                    cin >> contactToEdit->address.city;
+                    break;
+                    
+                case EditState:
+                    cout << "Enter new state: ";
+                    cin >> contactToEdit->address.state;
+                    break;
+                    
+                case EditAreaCode:
+                    cout << "Enter new area code: ";
+                    cin >> contactToEdit->address.areaCode;
+                    break;
+                    
+                case ExitAndSave:
+                    cout << "Exiting edit menu." << endl;
+                    break;
+                    
                 default:
-                    cout << "Invalid choice. Please try again." << std::endl;
+                    cout << "Invalid choice. Please try again." << endl;
             }
-        } while (choice != 5);
+        }while(editChoice != ExitAndSave);
     }
+
     // Helper function to find contact for editContact
-    Contact* findContactByName(Address& addressBook, const std::string& name) {
-        for (auto& contact : addressBook.contacts) {
-            if (contact.fullName == name) {
+    Contact* findContactByName(Address& addressBook, const string& name){
+        for (auto& contact : addressBook.contacts){
+            if (contact.fullName == name){
                 return &contact;
             }
         }
@@ -112,7 +145,7 @@ namespace addressBookManagement{
     }
 
     // Function to save address book to file
-    void saveToFile(const Address& addressBook, const string& filename) {
+    void saveToFile(const Address& addressBook, const string& filename){
             ofstream outFile(filename);  // Open the file for writing
 
             if (!outFile.is_open()){  // Check if the file was opened successfully
@@ -124,11 +157,15 @@ namespace addressBookManagement{
             outFile << "Full Name,Phone Number,Email, Street Address\n";
 
             // Loop through each contact and write their details in CSV format
-            for (const auto& contact : addressBook.contacts) {
+            for (const auto& contact : addressBook.contacts){
                 outFile << '"' << contact.fullName << "\","
                         << '"' << contact.phoneNumber << "\","
                         << '"' << contact.email << "\","
-                        << '"' << contact.streetAddress << "\",";
+                        << '"' << contact.address.streetNumber << "\","
+                        << '"' << contact.address.streetName << "\","
+                        << '"' << contact.address.city << "\","
+                        << '"' << contact.address.state << "\","
+                        << '"' << contact.address.areaCode << "\",";
             }
 
             outFile.close();  // Close the file
@@ -161,13 +198,27 @@ namespace addressBookManagement{
             getline(ss, contact.fullName, ',');
             getline(ss, contact.phoneNumber, ',');
             getline(ss, contact.email, ',');
-            getline(ss, contact.streetAddress, ',');
+            
+            // Read the nested address fields
+            string streetNumberStr;
+            string areaCodeStr;
+            getline(ss, streetNumberStr, ',');
+            getline(ss, contact.address.streetName, ',');
+            getline(ss, contact.address.city, ',');
+            getline(ss, contact.address.state, ',');
+            getline(ss, areaCodeStr, ',');
+            
+            // Convert the numeric string to short using std::stoi
+            contact.address.streetNumber = static_cast<short>(stoi(streetNumberStr));
+            contact.address.areaCode = static_cast<short>(stoi(areaCodeStr));
             
             // Remove quotes from field if there are any
             contact.fullName = contact.fullName.substr(1, contact.fullName.length() - 2);
             contact.phoneNumber = contact.phoneNumber.substr(1, contact.phoneNumber.length() - 2);
             contact.email = contact.email.substr(1, contact.email.length() - 2);
-            contact.streetAddress = contact.streetAddress.substr(1, contact.streetAddress.length() - 2);
+            contact.address.streetName = contact.address.streetName.substr(1, contact.address.streetName.length() - 2);
+            contact.address.city = contact.address.city.substr(1, contact.address.city.length() - 2);
+            contact.address.state = contact.address.state.substr(1, contact.address.state.length() - 2);
             
             addressBook.contacts.push_back(contact);
         }
@@ -179,20 +230,25 @@ namespace addressBookManagement{
     void manageAddressBook(Address& addressBook){
         int choice = 0;
         do{
+            // Menu option
             cout << AddContactMenu << ". Add Contact" << endl;
             cout << DisplayContactMenu << ". View Contact" << endl;
             cout << SearchContactMenu << ". Search Contact" << endl;
             cout << DeleteContactMenu << ". Delete Contact" << endl;
             cout << EditContactMenu << ". Edit Contact" << endl;
+            cout << SaveToFileMenu << ". Save to File" << endl;
+            cout << LoadFromFileMenu << ". Load from File" << endl;
             cout << Exit << ". Exit" << endl;
             
+            // Get user's choice
             cin >> choice;
             
             switch (choice){
                 case AddContactMenu:{
                     Contact newContact;
                     cout << "Enter new contacts full name: " << endl;
-                    cin.ignore();
+                    cin.ignore(); //clear newline
+                    
                     getline(cin, newContact.fullName);
                     
                     cout << "Enter new contacts phone number" << endl;
@@ -201,8 +257,21 @@ namespace addressBookManagement{
                     cout << "Enter new contacts email" << endl;
                     getline(cin, newContact.email);
                     
-                    cout << "Enter new contacts street address" << endl;
-                    getline(cin, newContact.streetAddress);
+                    cout << "Enter new contacts street number:" << endl;
+                    cin >> newContact.address.streetNumber;
+                    
+                    cout << "Enter new contacts street name:" << endl;
+                    cin.ignore();
+                    getline(cin, newContact.address.streetName);
+                    
+                    cout << "Enter new contacts city:" << endl;
+                    getline(cin, newContact.address.city);
+                    
+                    cout << "Enter new contacts state:" << endl;
+                    getline(cin, newContact.address.state);
+                    
+                    cout << "Enter new contacts area code:" << endl;
+                    cin >> newContact.address.areaCode;
                     
                     addContact(addressBook, newContact);
                     break;
@@ -245,6 +314,21 @@ namespace addressBookManagement{
                     } else {
                         cout << "Contact not found." << endl;
                     }
+                    break;
+                }
+                case SaveToFileMenu:{
+                    string filename;
+                    cout << "Enter filename to save the address book: ";
+                    cin >> filename;
+                    saveToFile(addressBook, filename);
+                    break;
+                }
+
+                case LoadFromFileMenu:{
+                    string filename;
+                    cout << "Enter filename to load the address book: ";
+                    cin >> filename;
+                    loadFromFile(addressBook, filename);
                     break;
                 }
                     

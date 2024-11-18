@@ -5,12 +5,21 @@
 
 using std::string;
 
-//struct to store individual contact information
+// Struct to store address details
+struct AddressDetails{
+    short streetNumber;
+    string streetName;
+    string city;
+    string state;
+    short areaCode;
+};
+
+// Struct to store individual contact information
 struct Contact{
     string fullName;
     string phoneNumber;
     string email;
-    string streetAddress;
+    AddressDetails address; // Nest AddressDetails struct
 };
 
 #endif

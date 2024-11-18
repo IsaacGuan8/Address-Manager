@@ -10,7 +10,6 @@ enum Menu{
     EditContactMenu,
     SaveToFileMenu,
     LoadFromFileMenu,
-    AddToFavoritesMenu,
     Exit
 };
 #endif
