@@ -14,9 +14,11 @@ namespace addressBookManagement{
     void searchContact(const Address& addressBook, const string& name);
     void deleteContact(const Address& addressBook, const string& name);
     void editContact(Contact* contactToEdit);
-    void saveToFile(const Address& addressBook, const string& filename);
-    void manageAddressBook(Address& addressBook);
     Contact* findContactByName(Address& addressBook, const std::string& name);
+    void saveToFile(const Address& addressBook, const string& filename);
+    void loadFromFile(Address& addressBook, const string& filename);
+    void manageAddressBook(Address& addressBook);
+    
 }
 
 #endif

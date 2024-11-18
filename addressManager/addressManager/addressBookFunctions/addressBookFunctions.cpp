@@ -9,7 +9,7 @@
 #include <sstream>
 
 
-using std::cout, std::endl, std::cin, std::string, std::getline, std::ifstream, std::ofstream, std::remove_if;
+using std::cout, std::endl, std::cin, std::string, std::getline, std::ifstream, std::ofstream, std::remove_if, std::stringstream;
 
 namespace addressBookManagement{
     //function to add in a contact
@@ -136,12 +136,44 @@ namespace addressBookManagement{
     }
 
     // Function to load address book from file
-    void loadFromFile(const Address& addressBook, const string& filename){
-        ifstream file(filename);
+    void loadFromFile(Address& addressBook, const string& filename){
+        ifstream inFile(filename);
         
+        if (!inFile.is_open()){  // Check if the file was opened successfully
+            cout << "Error opening " << filename << " for writing." << endl;
+            return;
+        }
         
+        string line;
+        bool isFirstLine = true; // to skip the CSV header
+        
+        while(getline(inFile, line)){
+            if(isFirstLine){
+                isFirstLine = false;
+                continue;
+            }
+            
+            // use of string stream to parse CSV line
+            stringstream ss(line);
+            Contact contact;
+            
+            // Read each field that is sperated by a comma
+            getline(ss, contact.fullName, ',');
+            getline(ss, contact.phoneNumber, ',');
+            getline(ss, contact.email, ',');
+            getline(ss, contact.streetAddress, ',');
+            
+            // Remove quotes from field if there are any
+            contact.fullName = contact.fullName.substr(1, contact.fullName.length() - 2);
+            contact.phoneNumber = contact.phoneNumber.substr(1, contact.phoneNumber.length() - 2);
+            contact.email = contact.email.substr(1, contact.email.length() - 2);
+            contact.streetAddress = contact.streetAddress.substr(1, contact.streetAddress.length() - 2);
+            
+            addressBook.contacts.push_back(contact);
+        }
+        inFile.close();
+        cout << "Contacts loaded from " << filename << endl;
     }
-    
     
     //function manages the user interface to select what they want to do in the address book program
     void manageAddressBook(Address& addressBook){
