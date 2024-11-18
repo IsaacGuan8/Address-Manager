@@ -4,8 +4,12 @@
 #include "contactOperators.hpp"
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <iomanip>
+#include <sstream>
 
-using std::cout, std::endl, std::cin, std::string, std::getline, std::ifstream, std::ofstream, std::shared_ptr;
+
+using std::cout, std::endl, std::cin, std::string, std::getline, std::ifstream, std::ofstream, std::remove_if;
 
 namespace addressBookManagement{
     //function to add in a contact
@@ -39,46 +43,103 @@ namespace addressBookManagement{
     }
     
     // Function to delete contact by the name from address book
-    void deleteContact(const Address& addressBook, const string& name){
-        for (auto it = addressBook.contacts.begin(); it != addressBook.contacts.end(); ++it){
-            if (it->fullName == name){
-                addressBook.contacts.erase(it);
-                cout << "Contact " << name << " has been deleted" << endl;
-                return;
-            }
+    void deleteContact(Address& addressBook, const string& name) {
+        // Use remove_if to find the contact by name and remove it from the vector
+        auto it = remove_if(addressBook.contacts.begin(), addressBook.contacts.end(), [&name](const Contact& contact) { return contact.fullName == name;});
+
+        // If the contact is found, erase it from the vector
+        if (it != addressBook.contacts.end()) {
+            addressBook.contacts.erase(it, addressBook.contacts.end());
+            cout << "Contact deleted." << std::endl;
+        } else {
+            cout << "Contact not found." << std::endl;
         }
-        cout << "Contact with name " << name << " not found in address book, deletion unsuccessful" << endl;
     }
 
     // Function to edit an existing contact
-    void editContact(const Address& addressBook, const string& name){
-        for(auto& contact: addressBook.contacts){
-            if(contact.fullName == name){
-                
+    void editContact(Contact* contactToEdit){
+        // If contact not found
+        if (contactToEdit == nullptr){
+                std::cout << "Invalid contact. Cannot edit." << std::endl;
+                return;
+            }
+        
+        int choice = 0;
+        do {
+            cout << "\nEditing Contact: " << contactToEdit->fullName << std::endl;
+            cout << "1. Edit Full Name" << std::endl;
+            cout << "2. Edit Phone Number" << std::endl;
+            cout << "3. Edit Email" << std::endl;
+            cout << "4. Edit Street Address" << std::endl;
+            cout << "5. Exit Edit Menu" << std::endl;
+            cout << "Enter your choice: ";
+            cin >> choice;
+            cin.ignore(); // Clear input buffer
+
+            switch (choice) {
+                case 1:
+                    cout << "Enter new full name: ";
+                    getline(std::cin, contactToEdit->fullName);
+                    break;
+                case 2:
+                    cout << "Enter new phone number: ";
+                    getline(std::cin, contactToEdit->phoneNumber);
+                    break;
+                case 3:
+                    cout << "Enter new email: ";
+                    getline(std::cin, contactToEdit->email);
+                    break;
+                case 4:
+                    cout << "Enter new street address: ";
+                    getline(std::cin, contactToEdit->streetAddress);
+                    break;
+                case 5:
+                    cout << "Exiting edit menu." << std::endl;
+                    break;
+                default:
+                    cout << "Invalid choice. Please try again." << std::endl;
+            }
+        } while (choice != 5);
+    }
+    // Helper function to find contact for editContact
+    Contact* findContactByName(Address& addressBook, const std::string& name) {
+        for (auto& contact : addressBook.contacts) {
+            if (contact.fullName == name) {
+                return &contact;
             }
         }
+        return nullptr; // Return nullptr if contact is not found
     }
 
     // Function to save address book to file
-    void saveToFile(const vector<shared_ptr<Contact>>& addressBook, const string& filename){
-        ofstream file(filename);
-        for (const auto& contact : addressBook) {
-            file << contact->fullName << "," << contact->phoneNumber << "," << contact->email << "," << contact->streetAddress << endl;
-        }
+    void saveToFile(const Address& addressBook, const string& filename) {
+            ofstream outFile(filename);  // Open the file for writing
+
+            if (!outFile.is_open()){  // Check if the file was opened successfully
+                cout << "Error opening " << filename << " for writing." << endl;
+                return;
+            }
+        
+            // Write CSV header
+            outFile << "Full Name,Phone Number,Email, Street Address\n";
+
+            // Loop through each contact and write their details in CSV format
+            for (const auto& contact : addressBook.contacts) {
+                outFile << '"' << contact.fullName << "\","
+                        << '"' << contact.phoneNumber << "\","
+                        << '"' << contact.email << "\","
+                        << '"' << contact.streetAddress << "\",";
+            }
+
+            outFile.close();  // Close the file
+            cout << "Contacts have been saved to " << filename << endl;
     }
 
     // Function to load address book from file
-    void loadFromFile(vector<shared_ptr<Contact>>& addressBook, const string& filename) {
+    void loadFromFile(const Address& addressBook, const string& filename){
         ifstream file(filename);
-        string line, name, phone, email, address;
-        while (getline(file, line)) {
-            size_t pos = line.find(',');
-            name = line.substr(0, pos); line.erase(0, pos + 1);
-            pos = line.find(','); phone = line.substr(0, pos); line.erase(0, pos + 1);
-            pos = line.find(','); email = line.substr(0, pos); line.erase(0, pos + 1);
-            address = line;
-            addContact(addressBook, {name, phone, email, address});
-        }
+        
+        
     }
     
     
@@ -129,10 +190,29 @@ namespace addressBookManagement{
                 }
                     
                 case DeleteContactMenu:{
+                    string name;
+                    cout << "Enter the name of the contact to delete: " << endl;
+                    cin.ignore();
+                    getline(cin, name);
+                    deleteContact(addressBook, name);
                     break;
                 }
                     
                 case EditContactMenu:{
+                    // Edit contact by name
+                    string name;
+                    cout << "Enter the name of the contact to edit: " << endl;
+                    cin.ignore();
+                    getline(cin, name);
+
+                    // Use the new helper function to find the contact
+                    Contact* contactToEdit = findContactByName(addressBook, name);
+                    
+                    if (contactToEdit != nullptr){
+                        editContact(contactToEdit);
+                    } else {
+                        cout << "Contact not found." << endl;
+                    }
                     break;
                 }
                     
@@ -146,5 +226,4 @@ namespace addressBookManagement{
             
         }while(choice != Exit);
     }
-
 }

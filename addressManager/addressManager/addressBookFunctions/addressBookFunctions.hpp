@@ -9,14 +9,14 @@
 using std::string, std::shared_ptr, std::vector;
 
 namespace addressBookManagement{
-    void addContact(const Address& addressBook);
+    void addContact(Address& addressBook, const Contact& newContact);
     void displayContacts(const Address& addressBook);
     void searchContact(const Address& addressBook, const string& name);
     void deleteContact(const Address& addressBook, const string& name);
-    void editContact(const Address& addressBook, const string& name);
-    void saveToFile(const vector<shared_ptr<Contact>>& addressBook, const string& filename);
-    void loadFromFile()
+    void editContact(Contact* contactToEdit);
+    void saveToFile(const Address& addressBook, const string& filename);
     void manageAddressBook(Address& addressBook);
+    Contact* findContactByName(Address& addressBook, const std::string& name);
 }
 
 #endif
