@@ -1,8 +1,11 @@
 #ifndef addressBookFunctions_hpp
 #define addressBookFunctions_hpp
 
+// Standard C++ libraries
 #include <string>
 #include <memory>
+
+// Project-specific includes
 #include "contact.h"
 #include "address.h"
 
@@ -14,11 +17,10 @@ namespace addressBookManagement{
     void searchContact(const Address& addressBook, const string& name);
     void deleteContact(const Address& addressBook, const string& name);
     void editContact(Contact* contactToEdit);
-    Contact* findContactByName(Address& addressBook, const std::string& name);
-    void saveToFile(const Address& addressBook, const string& filename);
-    void loadFromFile(Address& addressBook, const string& filename);
+    void saveToFile(const Address& addressBook, const string& filepath);
+    void loadFromFile(Address& addressBook, const string& filepath);
+    void sortContactsByName(vector<std::unique_ptr<Contact>>& contacts);
     void manageAddressBook(Address& addressBook);
-    
 }
 
 #endif

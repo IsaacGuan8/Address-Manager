@@ -10,6 +10,7 @@ enum class MenuChoice{
     EditContactMenu,
     SaveToFileMenu,
     LoadFromFileMenu,
+    SortContactByNameMenu,
     Exit
 };
 #endif

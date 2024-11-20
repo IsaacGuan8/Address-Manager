@@ -1,17 +1,17 @@
 #ifndef contact_h
 #define contact_h
 
+// Standard C++ libraries
 #include <string>
 
 using std::string;
 
-// Struct to store address details
-struct AddressDetails{
-    short streetNumber;
-    string streetName;
+// Struct to store location details
+struct LocationDetails{
+    string streetAddress;
     string city;
     string state;
-    short areaCode;
+    int areaCode;
 };
 
 // Struct to store individual contact information
@@ -19,7 +19,7 @@ struct Contact{
     string fullName;
     string phoneNumber;
     string email;
-    AddressDetails address; // Nest AddressDetails struct
+    LocationDetails address; // Nested AddressDetails struct
 };
 
 #endif
