@@ -6,6 +6,7 @@
 #include <sstream>
 #include <memory>
 #include <string>
+#include <algorithm>
 
 // Project-specific includes
 #include "address.h"
@@ -172,7 +173,14 @@ namespace addressBookManagement{
 
     // Function to save address book to file
     void saveToFile(const Address& addressBook, const string& filepath){
-        ofstream outFile(filepath); // Open the file at user specified path
+        
+        // Check if the file path ends with ".csv"
+        if (filepath.size() < 4 || filepath.substr(filepath.size() - 4) != ".csv"){
+            cout << "Load unsuccessful. Please ensure the file has a '.csv'." << endl;
+            return;
+        }
+        
+        ofstream outFile(filepath);
 
         // Check if there are contacts to save
         if(addressBook.contacts.empty()){
@@ -201,11 +209,18 @@ namespace addressBookManagement{
         }
 
         outFile.close();
-        cout << "Contacts have been saved to: " << filepath << endl;
+        cout << "Contacts have been successfully saved to: " << filepath << endl;
     }
 
     // Function to load address book from file
     void loadFromFile(Address& addressBook, const string& filepath){
+        
+        // Check if the file path ends with ".csv"
+        if (filepath.size() < 4 || filepath.substr(filepath.size() - 4) != ".csv"){
+            cout << "Save unsuccessful. Please ensure the file has a '.csv' extension." << endl;
+            return;
+        }
+        
         ifstream inFile(filepath);
         
         // Check if the file was opened successfully
