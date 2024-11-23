@@ -34,7 +34,7 @@ namespace addressBookManagement{
         newContact.address.streetAddress = to_string(streetNumber) + " " + streetName;
         
         newContact.address.city = helper::getStringInput("Enter new contact's city:");
-        newContact.address.state = helper::getStateInput("Enter new contact's state (in abreviated form with two initials):");
+        newContact.address.state = helper::getStateInput("Enter new contact's state (in abreviated form with two initials and  capitalized):");
         newContact.address.areaCode = helper::getIntInput("Enter new contact's area code:");
         
         
