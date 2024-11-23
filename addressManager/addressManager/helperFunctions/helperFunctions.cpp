@@ -27,7 +27,7 @@ namespace helper{
         }
     }
 
-    // Function to make sure input is a short
+    // Function to make sure input is a short integer
     short getShortInput(const string& prompt){
         int input;
         while(true){
@@ -102,15 +102,6 @@ namespace helper{
         return nullptr;
     }
 
-    // Helper function to trim quotes when loading files
-    string removeQuotes(const string& str){
-        string result = str;
-        if(!result.empty() && result.front() == '"' && result.back() == '"'){
-            result = result.substr(1, result.size() - 2);
-        }
-        return result;
-    }
-    
     // Helper function to compare contacts names
     bool compareByName(const unique_ptr<Contact>& a, const unique_ptr<Contact>& b){
         return a->fullName < b->fullName; // Dereference unique_ptr and compare fullName

@@ -11,7 +11,6 @@ namespace helper{
     string getStateInput(const string& prompt);
     string getValidEmail(const string& prompt);
     Contact* findContactByName(Address& addressBook, const string& name);
-    string removeQuotes(const string& str);
     bool compareByName(const unique_ptr<Contact>& a, const unique_ptr<Contact>& b);
 }
 

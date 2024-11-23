@@ -7,9 +7,7 @@
 // Project-specific includes
 #include "contact.h"
 
-
 using std::ostream;
-
 
 namespace addressBookManagement{
     ostream& operator << (ostream& stream, const Contact& contact);

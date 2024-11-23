@@ -116,7 +116,7 @@ namespace addressBookManagement{
             cout << "Enter your choice:" << endl;
             
             // Validate user input
-            while(!(cin >> choice) || choice < static_cast<int>(EditContactMenu::EditFullName) || choice > static_cast<int>(EditContactMenu::ExitAndSave)){
+            while(!(cin >> choice) || choice <static_cast<int>(EditContactMenu::EditFullName) || choice > static_cast<int>(EditContactMenu::ExitAndSave)){
                 // Clear the error flag and discard invalid input
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -184,10 +184,11 @@ namespace addressBookManagement{
         // Check if there are contacts to save
         if(addressBook.contacts.empty()){
             cout << "No contacts to save." << endl;
-            return; // Exit the function early if there are no contacts
+            return;
         }
     
-        if(!outFile.is_open()){ // Check if the file was opened successfully
+        // Check if the file was opened successfully
+        if(!outFile.is_open()){
             cout << "Error opening " << filepath << " for writing." << endl;
             return;
         }
@@ -197,7 +198,6 @@ namespace addressBookManagement{
         
         // Loop through all contacts and write their details in CSV format
         for(const auto& contact : addressBook.contacts){
-            // Write the contact details to the file
             outFile << '"' << contact->fullName << "\","
                     << '"' << contact->phoneNumber << "\","
                     << '"' << contact->email << "\","
@@ -215,7 +215,8 @@ namespace addressBookManagement{
     void loadFromFile(Address& addressBook, const string& filepath){
         ifstream inFile(filepath);
         
-        if(!inFile.is_open()){ // Check if the file was opened successfully
+        // Check if the file was opened successfully
+        if(!inFile.is_open()){
             cout << "Error opening " << filepath << " for reading." << endl;
             return;
         }
@@ -224,7 +225,8 @@ namespace addressBookManagement{
         bool firstLine = true;
         
         while(getline(inFile, line)){
-            if(firstLine){ // Makes sure we skip the header when reading
+            // Makes sure we skip the header when reading
+            if(firstLine){
                 firstLine = false;
                 continue;
             }
