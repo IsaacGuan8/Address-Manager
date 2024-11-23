@@ -40,6 +40,9 @@ Folder Layout:
 Example test of menu(include some error handling):
 ![File Layout](images/exampleCase.png)
 
+markdown
+    [Link to Video](https://drive.google.com/file/d/1amcYki0e_nS5ux4FtdyPJBKQq-Jzl_Hl/view?usp=sharing)
+
 ## Author
 
 Isaac Guan
