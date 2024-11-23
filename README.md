@@ -30,9 +30,11 @@ Enums: For managing menu options
 ## Screenshots and Video
 
 Main Menu:
+
 ![Main Menu](images/mainMenu.png)
 
 Folder Layout:
+
 ![File Layout](images/folderLayout.png)
 
 Example test of menu(include some error handling):
