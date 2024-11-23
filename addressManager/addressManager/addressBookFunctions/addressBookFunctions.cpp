@@ -279,9 +279,10 @@ namespace addressBookManagement{
         MenuChoice choice = MenuChoice::Exit; // Explicitly initialize to a valid value
         
         cout << "Welcome to the address manager system!" << endl;
-        cout << "Below are the operation you can perform." << endl;
-        cout << "Choose one using the numbers indicated." << endl;
+        
         do{
+            cout << "Below are the operation you can perform." << endl;
+            cout << "Choose one using the numbers indicated." << endl;
             // Menu option
             helper::displayMenu();
             
