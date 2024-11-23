@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include <limits>
+#include <cstring>
+#include <cctype>
 
 // Project-specific includes
 #include "contact.h"
@@ -69,6 +71,9 @@ namespace helper{
             if(cin.peek() == '\n') cin.ignore();
             getline(cin, state);
             if(state.length() == 2){
+                // Automatically capitalize state initials
+                state[0] = toupper(state[0]);
+                state[1] = toupper(state[1]);
                 return state;
             }else{
                 cout << "Invalid state. Please enter a 2-letter state code:" << endl;

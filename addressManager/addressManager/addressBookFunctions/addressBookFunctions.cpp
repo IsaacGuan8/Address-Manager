@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include <algorithm>
+#include <utility>
 
 // Project-specific includes
 #include "address.h"
@@ -34,7 +35,7 @@ namespace addressBookManagement{
         newContact.address.streetAddress = to_string(streetNumber) + " " + streetName;
         
         newContact.address.city = helper::getStringInput("Enter new contact's city:");
-        newContact.address.state = helper::getStateInput("Enter new contact's state (in abreviated form with two initials and  capitalized):");
+        newContact.address.state = helper::getStateInput("Enter new contact's state (in abreviated form with two initials):");
         newContact.address.areaCode = helper::getIntInput("Enter new contact's area code:");
         
         
@@ -122,18 +123,15 @@ namespace addressBookManagement{
             // Process menu choice for editing
             switch(editChoice){
                 case EditContactMenu::EditFullName:
-                    cout << "Enter new full name: ";
-                    getline(cin, contactToEdit->fullName);
+                    contactToEdit->fullName = helper::getStringInput("Enter new full name:");
                     break;
                     
                 case EditContactMenu::EditPhoneNumber:
-                    cout << "Enter new phone number: ";
-                    getline(cin, contactToEdit->phoneNumber);
+                    contactToEdit->phoneNumber = helper::getStringInput("Enter new phone number:");
                     break;
                     
                 case EditContactMenu::EditEmail:
-                    cout << "Enter new email: ";
-                    getline(cin, contactToEdit->email);
+                    contactToEdit->email = helper::getValidEmail("Enter new email:");
                     break;
                     
                 case EditContactMenu::EditStreetAddress:
@@ -147,18 +145,15 @@ namespace addressBookManagement{
                     break;
                     
                 case EditContactMenu::EditCity:
-                    cout << "Enter new city: ";
-                    cin >> contactToEdit->address.city;
+                    contactToEdit->address.city = helper::getStringInput("Enter new city:");
                     break;
                     
                 case EditContactMenu::EditState:
-                    cout << "Enter new state: ";
-                    cin >> contactToEdit->address.state;
+                    contactToEdit->address.state = helper::getStateInput("Enter new state:");
                     break;
                     
                 case EditContactMenu::EditAreaCode:
-                    cout << "Enter new area code: ";
-                    cin >> contactToEdit->address.areaCode;
+                    contactToEdit->address.areaCode = helper::getIntInput("Enter new area code:");
                     break;
                     
                 case EditContactMenu::ExitAndSave:
@@ -176,7 +171,7 @@ namespace addressBookManagement{
         
         // Check if the file path ends with ".csv"
         if (filepath.size() < 4 || filepath.substr(filepath.size() - 4) != ".csv"){
-            cout << "Load unsuccessful. Please ensure the file has a '.csv'." << endl;
+            cout << "Load unsuccessful. Please ensure the file has a '.csv'. Return to Menu." << endl;
             return;
         }
         
@@ -217,7 +212,7 @@ namespace addressBookManagement{
         
         // Check if the file path ends with ".csv"
         if (filepath.size() < 4 || filepath.substr(filepath.size() - 4) != ".csv"){
-            cout << "Save unsuccessful. Please ensure the file has a '.csv' extension." << endl;
+            cout << "Save unsuccessful. Please ensure the file has '.csv'. Return to Menu." << endl;
             return;
         }
         
@@ -314,7 +309,7 @@ namespace addressBookManagement{
                     
                 case MenuChoice::SearchContactMenu:{
                     string name;
-                    cout << "Enter to to search for in address book:" << endl;
+                    cout << "Enter a full name to search for in address book:" << endl;
                     cin.ignore();
                     getline(cin, name);
                     searchContact(addressBook, name);
