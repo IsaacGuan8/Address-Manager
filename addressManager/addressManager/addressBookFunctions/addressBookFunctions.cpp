@@ -46,9 +46,10 @@ namespace addressBookManagement{
         if(addressBook.contacts.empty()){
             cout << "Address book is currently empty!" << endl;
         }else{
+            cout << endl;
             cout << "Contacts in the address book:" << endl;
-            // Access the underlying array with &addressBook.contacts[0] and perform pointer arithmetic
-            const unique_ptr<Contact>* ptr = &addressBook.contacts[0]; // Get a pointer to the first contact
+            // Access the underlying array with &addressBook.contacts[0] to perform pointer arithmetic
+            const unique_ptr<Contact>* ptr = &addressBook.contacts[0];
 
             for(size_t i = 0; i < addressBook.contacts.size(); ++i){
                 // Dereference the unique_ptr to get the Contact object pointer
@@ -102,21 +103,13 @@ namespace addressBookManagement{
         
         do{
             // Display Menu
-            cout << "Editing Contact: " << contactToEdit->fullName << endl;
-            cout << static_cast<int>(EditContactMenu::EditFullName) << ". Edit Full Name" << endl;
-            cout << static_cast<int>(EditContactMenu::EditPhoneNumber) << ". Edit Phone Number" << endl;
-            cout << static_cast<int>(EditContactMenu::EditEmail) << ". Edit Email" << endl;
-            cout << static_cast<int>(EditContactMenu::EditStreetAddress) << ". Edit Street Address" << endl;
-            cout << static_cast<int>(EditContactMenu::EditCity) << ". Edit City" << endl;
-            cout << static_cast<int>(EditContactMenu::EditState) << ". Edit State" << endl;
-            cout << static_cast<int>(EditContactMenu::EditAreaCode) << ". Edit Area Code" << endl;
-            cout << static_cast<int>(EditContactMenu::ExitAndSave) << ". Save and Exit Edit Menu" << endl;
+            helper::displayEditMenu(contactToEdit);
             
             int choice;
             cout << "Enter your choice:" << endl;
             
             // Validate user input
-            while(!(cin >> choice) || choice <static_cast<int>(EditContactMenu::EditFullName) || choice > static_cast<int>(EditContactMenu::ExitAndSave)){
+            while(!(cin >> choice) || choice < helper::toInt(EditContactMenu::EditFullName) || choice > helper::toInt(EditContactMenu::ExitAndSave)){
                 // Clear the error flag and discard invalid input
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -257,6 +250,7 @@ namespace addressBookManagement{
             addressBook.contacts.push_back(std::move(newContact));
         }
         inFile.close();
+        cout << "Successfully loaded from file path " << filepath << endl;
     }
 
     // Function to sort full names Alphabetically
@@ -274,22 +268,14 @@ namespace addressBookManagement{
         cout << "Choose one using the numbers indicated." << endl;
         do{
             // Menu option
-            cout << static_cast<int>(MenuChoice::AddContactMenu) << ". Add Contact" << endl;
-            cout << static_cast<int>(MenuChoice::DisplayContactMenu) << ". View Contact" << endl;
-            cout << static_cast<int>(MenuChoice::SearchContactMenu) << ". Search Contact" << endl;
-            cout << static_cast<int>(MenuChoice::DeleteContactMenu) << ". Delete Contact" << endl;
-            cout << static_cast<int>(MenuChoice::EditContactMenu) << ". Edit Contact" << endl;
-            cout << static_cast<int>(MenuChoice::SaveToFileMenu) << ". Save to File" << endl;
-            cout << static_cast<int>(MenuChoice::LoadFromFileMenu) << ". Load from File" << endl;
-            cout << static_cast<int>(MenuChoice::SortContactByNameMenu) << ". Sort Contacts Alphabetically" << endl;
-            cout << static_cast<int>(MenuChoice::Exit) << ". Exit" << endl;
+            helper::displayMenu();
             
             // Get user's choice
             int inputChoice;
             cout << "Enter your choice: " << endl;
             
             // Validate user input
-            while(!(cin >> inputChoice) || inputChoice < static_cast<int>(MenuChoice::AddContactMenu) || inputChoice > static_cast<int>(MenuChoice::Exit)){
+            while(!(cin >> inputChoice) || inputChoice < helper::toInt(MenuChoice::AddContactMenu) || inputChoice > helper::toInt(MenuChoice::Exit)){
                 // Clear the error flag and discard invalid input
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -351,7 +337,6 @@ namespace addressBookManagement{
                     cin.ignore();
                     getline(cin, filepath);
                     saveToFile(addressBook, filepath);
-                    cout << "Successfully saved to file path " << filepath << endl;
                     break;
                 }
 
@@ -361,7 +346,6 @@ namespace addressBookManagement{
                     cin.ignore();
                     getline(cin, filepath);
                     loadFromFile(addressBook, filepath);
-                    cout << "Successfully loaded from filepath " << filepath << endl;
                     break;
                 }
                    

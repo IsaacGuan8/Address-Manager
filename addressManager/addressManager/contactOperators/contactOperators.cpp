@@ -13,7 +13,7 @@ namespace addressBookManagement{
         stream << "Name: " << contact.fullName << endl;
         stream << "Phone: " << contact.phoneNumber << endl;
         stream << "Email: " << contact.email << endl;
-        stream << "Street Address: " << contact.address.streetAddress << ", " << contact.address.city << ", " << contact.address.state << " " << contact.address.areaCode << endl;
+        stream << "Street Address: " << contact.address.streetAddress << ", " << contact.address.city << ", " << contact.address.state << " " << contact.address.areaCode;
         return stream;
     }
 }

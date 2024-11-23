@@ -6,6 +6,8 @@
 // Project-specific includes
 #include "contact.h"
 #include "address.h"
+#include "menu.h"
+#include "editContactMenu.h"
 
 using std::string, std::to_string, std::endl, std::cout, std::cin, std::streamsize, std::numeric_limits, std::stringstream;
 
@@ -102,8 +104,54 @@ namespace helper{
         return nullptr;
     }
 
+    // Helper function to trim quotes when loading files
+    string removeQuotes(const string& str){
+        string result = str;
+        if(!result.empty() && result.front() == '"' && result.back() == '"'){
+            result = result.substr(1, result.size() - 2);
+        }
+        return result;
+    }
+    
     // Helper function to compare contacts names
     bool compareByName(const unique_ptr<Contact>& a, const unique_ptr<Contact>& b){
         return a->fullName < b->fullName; // Dereference unique_ptr and compare fullName
+    }
+
+    // Helper function to get the integer value of an enum for manageAddressBook function
+    int toInt(MenuChoice choice){
+        return static_cast<int>(choice);
+    }
+
+    // Helper function to get the integer value of an enum overloaded for editContact function
+    int toInt(EditContactMenu choice){
+        return static_cast<int>(choice);
+    }
+    
+    // Display the menu for user in the manageAddressBook function
+    void displayMenu(){
+        cout << toInt(MenuChoice::AddContactMenu) << ". Add Contact" << endl;
+        cout << toInt(MenuChoice::DisplayContactMenu) << ". View Contact" << endl;
+        cout << toInt(MenuChoice::SearchContactMenu) << ". Search Contact" << endl;
+        cout << toInt(MenuChoice::DeleteContactMenu) << ". Delete Contact" << endl;
+        cout << toInt(MenuChoice::EditContactMenu) << ". Edit Contact" << endl;
+        cout << toInt(MenuChoice::SaveToFileMenu) << ". Save to File" << endl;
+        cout << toInt(MenuChoice::LoadFromFileMenu) << ". Load from File" << endl;
+        cout << toInt(MenuChoice::SortContactByNameMenu) << ". Sort Contacts Alphabetically" << endl;
+        cout << toInt(MenuChoice::Exit) << ". Exit" << endl;
+    }
+
+    // Display the menu for user in the editContact function
+    void displayEditMenu(Contact* contactToEdit){
+        cout << "Editing Contact: " << contactToEdit->fullName << endl;
+        cout << toInt(EditContactMenu::EditFullName) << ". Edit Full Name" << endl;
+        cout << toInt(EditContactMenu::EditPhoneNumber) << ". Edit Phone Number" << endl;
+        cout << toInt(EditContactMenu::EditEmail) << ". Edit Email" << endl;
+        cout << toInt(EditContactMenu::EditStreetAddress) << ". Edit Street Address" << endl;
+        cout << toInt(EditContactMenu::EditCity) << ". Edit City" << endl;
+        cout << toInt(EditContactMenu::EditState) << ". Edit State" << endl;
+        cout << toInt(EditContactMenu::EditAreaCode) << ". Edit Area Code" << endl;
+        cout << toInt(EditContactMenu::ExitAndSave) << ". Save and Exit Edit Menu" << endl;
+        
     }
 };
